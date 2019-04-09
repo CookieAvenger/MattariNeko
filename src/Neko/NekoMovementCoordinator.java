@@ -3,6 +3,7 @@ package Neko;
 import FrontEnd.NekoActions.*;
 import java.awt.Point;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,7 +19,7 @@ public class NekoMovementCoordinator {
     nextActionEndLocation = approximateNextLocation(nekoLocation, goalLocation);
     if (nekoLocation.equals(goalLocation) && sitAtGoal) {
       if (sittingCatActions.isEmpty()) {
-        generateSittingCatAction();
+        sittingCatActions.addAll(generateSittingCatAction());
       }
       assignedAction = sittingCatActions.poll();
     } else if (nextActionEndLocation.equals(goalLocation) && !sitAtGoal) {
@@ -32,7 +33,8 @@ public class NekoMovementCoordinator {
     }
   }
 
-  private void generateSittingCatAction() {
+  static List<NekoAction> generateSittingCatAction() {
+    List<NekoAction> sittingCatActions = new LinkedList<>();
     int numberOfSits = ThreadLocalRandom.current().nextInt(10, 20);
     for (int i = 0; i < numberOfSits; ++i) {
       sittingCatActions.add(new Sit());
@@ -45,6 +47,7 @@ public class NekoMovementCoordinator {
     for (int i = 0; i < numberOfScratches; ++i) {
       sittingCatActions.add(new ScratchItself());
     }
+    return sittingCatActions;
   }
 
   private boolean nekoAtGoal(Point nekoLocation, Point goalLocation) {

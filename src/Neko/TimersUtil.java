@@ -19,25 +19,22 @@ public class TimersUtil {
   private static boolean currentlyWorking = false;
 
   public static List<JButton> getWorkTimeButtons() {
-    return turnTimersIntoButtons(workTimers, false);
+    return turnTimersIntoButtons(workTimers, "work");
   }
 
   public static List<JButton> getPlayTimeButtons() {
-    return turnTimersIntoButtons(playTimers, false);
+    return turnTimersIntoButtons(playTimers, "play");
   }
 
   public static List<JButton> getSnoozeTimeButtons() {
-    return turnTimersIntoButtons(snoozeTimers, true);
+    return turnTimersIntoButtons(snoozeTimers, "snooze");
   }
 
-  private static List<JButton> turnTimersIntoButtons(List<Integer> timers, boolean snoozeButtons) {
+  private static List<JButton> turnTimersIntoButtons(List<Integer> timers, String type) {
     List<JButton> buttons = new ArrayList<>();
     for (int time : timers) {
-      String buttonText = Integer.toString(time);
-      if (!snoozeButtons) {
-        buttonText += " mins";
-      }
-      JButton button = new JButton(buttonText);
+      JButton button = new JButton(time + " mins");
+      button.setName(time + " " + type);
       button.addActionListener(new ButtonInteraction());
       buttons.add(button);
     }
@@ -49,28 +46,28 @@ public class TimersUtil {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
       MattariNeko.flipNekoAwake();
-      setUpTimer(((JButton) actionEvent.getSource()).getText());
+      String timerDescription = ((JButton) actionEvent.getSource()).getName();
+      Scanner sc = new Scanner(timerDescription);
+      int minutes = sc.nextInt();
+      String type = sc.next();
+      boolean isSnooze = false;
+      if (type.equals("snooze")) {
+        isSnooze = true;
+      }
+      setUpTimer(minutes, isSnooze);
     }
   }
 
-  private static void setUpTimer(String text) {
-    boolean isSnooze = true;
-    Scanner sc = new Scanner(text);
-    int minutes = sc.nextInt();
-    if (sc.hasNext()) {
-      isSnooze = false;
-    }
-    sc.close();
+  private static void setUpTimer(int minutes, boolean isSnooze) {
     if (timer != null) {
       timer.cancel();
       timer.purge();
     }
     timer = new Timer("Neko Timer");
-    boolean finalIsSnooze = isSnooze;
     timer.schedule(new TimerTask() {
       @Override
       public void run() {
-        if (!finalIsSnooze) {
+        if (!isSnooze) {
           currentlyWorking = !currentlyWorking;
         }
         MattariNeko.flipNekoAwake();

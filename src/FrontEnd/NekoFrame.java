@@ -1,5 +1,8 @@
 package FrontEnd;
 
+import static Neko.MattariNeko.setNekoDown;
+import static Neko.MattariNeko.setNekoUp;
+
 import FrontEnd.NekoActions.NekoImages;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -10,11 +13,11 @@ public class NekoFrame extends JFrame {
 
   private NekoPanel panel = new NekoPanel();
   private static MattariFrame relaxFrame = null;
-  private static int x, y;
   private static double widthPercent = 97.5, heightPercent = 97.5;
 
   public NekoFrame() {
     setUndecorated(true);
+
     setBounds(new Rectangle(NekoImages.IMAGE_WIDTH, NekoImages.IMAGE_HEIGHT));
     setBackground(new java.awt.Color(0, 0, 0, 0));
     setNekoLocation(getStartingLocation());
@@ -45,14 +48,12 @@ public class NekoFrame extends JFrame {
   }
 
   public void setNekoLocation(Point location) {
-    Point validLocation = getValidNekoLocation(location);
-    this.x = validLocation.x;
-    this.y = validLocation.y;
-    setLocation(validLocation);
+    setLocation(getValidNekoLocation(location));
   }
 
   public Point getNekoLocation() {
-    return new Point(x + (NekoImages.IMAGE_WIDTH / 2), (y + NekoImages.IMAGE_HEIGHT / 2));
+    Point currentLocation = getLocation();
+    return new Point(currentLocation.x + (NekoImages.IMAGE_WIDTH / 2), (currentLocation.y + NekoImages.IMAGE_HEIGHT / 2));
   }
 
   public Point getMouseLocation() throws Exception {
@@ -74,7 +75,7 @@ public class NekoFrame extends JFrame {
     return this.getValidNekoLocation(new Point(x, y));
   }
 
-  public Dimension getScreenSize() {
+  public static Dimension getScreenSize() {
     return Toolkit.getDefaultToolkit().getScreenSize();
   }
 
@@ -100,20 +101,22 @@ public class NekoFrame extends JFrame {
 
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
-
+      setNekoUp();
     }
 
     @Override
     public void mouseExited(MouseEvent mouseEvent) {
-
+      setNekoDown();
     }
   }
 
   public static void openMattariFrame() {
     if (relaxFrame != null) {
+      relaxFrame.toFront();
+      relaxFrame.requestFocus();
       return;
     }
-    relaxFrame = new MattariFrame(new Point(x, y));
+    relaxFrame = new MattariFrame();
     relaxFrame.setVisible(true);
   }
 
