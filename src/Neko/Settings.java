@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Settings {
@@ -25,10 +26,14 @@ public class Settings {
       Path originalPath = Paths.get("MattariNeko.conf");
       try {
         Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
-        loadSettings();
       } catch (IOException e) {
         e.printStackTrace();
       }
+    }
+    try {
+      loadSettings();
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
     }
   }
 
@@ -39,24 +44,24 @@ public class Settings {
       if (line.charAt(0) =='#') {
         continue;
       }
-      Scanner s = new Scanner(line);
-      String option = s.next();
-      if (option.equals("Work")) {
+      Scanner s = new Scanner(line).useLocale(Locale.US);
+      String option = s.next().toLowerCase();
+      if (option.equals("work")) {
         List<Integer> timers = getTimers(s);
         TimersUtil.setWorkTimers(timers);
-      } else if (option.equals("Play")) {
+      } else if (option.equals("play")) {
         List<Integer> timers = getTimers(s);
         TimersUtil.setPlayTimers(timers);
-      } else if (option.equals("Snooze")) {
+      } else if (option.equals("snooze")) {
         List<Integer> timers = getTimers(s);
         TimersUtil.setSnoozeTimers(timers);
-      } else if (option.equals("Screen")) {
-        double widthPercent = sc.nextDouble();
-        double heightPercent = sc.nextDouble();
+      } else if (option.equals("screen")) {
+        double widthPercent = s.nextDouble();
+        double heightPercent = s.nextDouble();
         NekoFrame.setWidthPercent(widthPercent);
         NekoFrame.setHeightPercent(heightPercent);
-      } else if (option.equals("Speed")) {
-        int movement = sc.nextInt();
+      } else if (option.equals("speed")) {
+        int movement = s.nextInt();
         NekoMovementCoordinator.setMaxMovementPerAction(movement);
       }
       s.close();

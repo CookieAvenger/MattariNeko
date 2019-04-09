@@ -1,8 +1,8 @@
 package FrontEnd;
 
 import static FrontEnd.NekoFrame.closeMattariFrame;
+import static Neko.MattariNeko.goHomeNeko;
 
-import Neko.MattariNeko;
 import Neko.TimersUtil;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -79,8 +79,9 @@ public class MattariPanel extends JPanel {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-      MattariNeko.nekoExit();
-      System.exit(0);
+      goHomeNeko();
+      closeMattariFrame();
+      MattariFrame.dispose();
     }
   }
 }

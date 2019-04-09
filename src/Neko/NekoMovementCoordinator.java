@@ -15,8 +15,6 @@ public class NekoMovementCoordinator {
   private NekoAction assignedAction;
 
   public NekoMovementCoordinator(Point nekoLocation, Point goalLocation, boolean sitAtGoal) {
-    System.out.println("f2 "+ nekoLocation);
-    System.out.println("g2" + goalLocation);
     nextActionEndLocation = approximateNextLocation(nekoLocation, goalLocation);
     if (nekoLocation.equals(goalLocation) && sitAtGoal) {
       if (sittingCatActions.isEmpty()) {

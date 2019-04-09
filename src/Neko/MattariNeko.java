@@ -12,8 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class MattariNeko {
 
   private static NekoFrame frame;
-  private static boolean nekoReleased = true;
-  private static boolean nekoFinished = false;
+  private static boolean nekoAwake = true;
+  private static boolean nekoGoingHome = false;
   private static NekoImages images;
 
   public static void main(String[] args) {
@@ -21,20 +21,24 @@ public class MattariNeko {
     images = new NekoImages();
     frame = new NekoFrame();
     frame.setVisible(true);
-    //nekoFinished needs to be other places too
-    while (!nekoFinished) {
+    while (!nekoGoingHome) {
       nekoRun();
-      nekoStop();
+      if (!nekoGoingHome) {
+        nekoStop();
+      }
     }
     nekoExit();
+    System.exit(0);
   }
 
-  public static void flipNeko() {
-    nekoReleased = !nekoReleased;
+  public static void flipNekoAwake() {
+    nekoAwake = !nekoAwake;
   }
 
-  //set location at start from file
-  //have ability to return to it from wherever it is
+  public static void goHomeNeko() {
+    nekoGoingHome = true;
+    flipNekoAwake();
+  }
 
   public static void nekoRun() {
     NekoImages images = new NekoImages();
@@ -43,7 +47,7 @@ public class MattariNeko {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    while (nekoReleased) {
+    while (nekoAwake) {
       try {
         NekoMovementCoordinator nextMove = new NekoMovementCoordinator(frame.getNekoLocation(), frame.getMouseLocation(), false);
         nextMove.getAssignedAction().doAction(images, frame, nextMove);
@@ -56,11 +60,13 @@ public class MattariNeko {
   public static void nekoStop() {
     nekoToLocation(frame.getStartingLocation());
     try {
-      new SittingYawn().doAction(images,frame, null);
+      for (int i = 0; i < 2; ++i) {
+        new SittingYawn().doAction(images, frame, null);
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }
-    while (!nekoReleased) {
+    while (!nekoAwake) {
       try {
         new Sleep().doAction(images, frame, null);
       } catch (Exception e) {
@@ -70,11 +76,10 @@ public class MattariNeko {
   }
 
   private static void nekoToLocation(Point goalLocation) {
-    while (!frame.getNekoLocation().equals(frame.getValidNekoLocation(goalLocation))) {
+    Point validGoalLocation = frame.getValidNekoLocation(goalLocation);
+    while (!validGoalLocation.equals(frame.getNekoLocation())) {
       try {
-        System.out.println("f " + frame.getNekoLocation());
-        System.out.println("g " + frame.getValidNekoLocation(goalLocation));
-        NekoMovementCoordinator nextMove = new NekoMovementCoordinator(frame.getNekoLocation(), frame.getValidNekoLocation(goalLocation), true);
+        NekoMovementCoordinator nextMove = new NekoMovementCoordinator(frame.getNekoLocation(), validGoalLocation, true);
         nextMove.getAssignedAction().doAction(images, frame, nextMove);
       } catch (Exception e) {
         e.printStackTrace();
@@ -83,10 +88,6 @@ public class MattariNeko {
   }
 
   public static void nekoExit() {
-    nekoReleased = false;
-    nekoReleased = true;
-    nekoReleased = false;
-
     Dimension screen = frame.getScreenSize();
     int perimeter = screen.height*2 + screen.width*2;
     int pointOnPerimeter = ThreadLocalRandom.current().nextInt(0, perimeter);

@@ -45,7 +45,6 @@ public class NekoFrame extends JFrame {
   }
 
   public void setNekoLocation(Point location) {
-    System.out.println("l " + location );
     Point validLocation = getValidNekoLocation(location);
     this.x = validLocation.x;
     this.y = validLocation.y;

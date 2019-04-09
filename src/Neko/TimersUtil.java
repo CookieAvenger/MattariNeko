@@ -48,7 +48,7 @@ public class TimersUtil {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-      MattariNeko.flipNeko();
+      MattariNeko.flipNekoAwake();
       setUpTimer(((JButton) actionEvent.getSource()).getText());
     }
   }
@@ -73,7 +73,7 @@ public class TimersUtil {
         if (!finalIsSnooze) {
           currentlyWorking = !currentlyWorking;
         }
-        MattariNeko.flipNeko();
+        MattariNeko.flipNekoAwake();
       }
     }, minutes * 60 * 1000);
   }
