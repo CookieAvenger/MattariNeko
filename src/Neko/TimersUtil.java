@@ -2,6 +2,7 @@ package Neko;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,11 +35,26 @@ public class TimersUtil {
     List<JButton> buttons = new ArrayList<>();
     for (int time : timers) {
       JButton button = new JButton(time + " mins");
-      button.setName(time + " " + type);
+      button.setName(type + " " + time + " mins");
       button.addActionListener(new ButtonInteraction());
       buttons.add(button);
     }
     return buttons;
+  }
+
+  public static String getTypeFromButtonName(String buttonName) {
+    Scanner sc = new Scanner(buttonName);
+    String type = sc.next();
+    sc.close();
+    return type;
+  }
+
+  public static Duration getTimeFromButtonName(String buttonName) {
+    Scanner sc = new Scanner(buttonName);
+    sc.next();
+    int minutes = sc.nextInt();
+    sc.close();
+    return Duration.ofMinutes(minutes);
   }
 
   private static class ButtonInteraction implements ActionListener {
@@ -47,9 +63,8 @@ public class TimersUtil {
     public void actionPerformed(ActionEvent actionEvent) {
       MattariNeko.flipNekoAwake();
       String timerDescription = ((JButton) actionEvent.getSource()).getName();
-      Scanner sc = new Scanner(timerDescription);
-      int minutes = sc.nextInt();
-      String type = sc.next();
+      String type = getTypeFromButtonName(timerDescription);
+      Duration minutes = getTimeFromButtonName(timerDescription);
       boolean isSnooze = false;
       if (type.equals("snooze")) {
         isSnooze = true;
@@ -58,7 +73,7 @@ public class TimersUtil {
     }
   }
 
-  private static void setUpTimer(int minutes, boolean isSnooze) {
+  private static void setUpTimer(Duration minutes, boolean isSnooze) {
     if (timer != null) {
       timer.cancel();
       timer.purge();
@@ -72,7 +87,7 @@ public class TimersUtil {
         }
         MattariNeko.flipNekoAwake();
       }
-    }, minutes * 60 * 1000);
+    }, minutes.toMillis());
   }
 
   public static boolean isAtWork() {

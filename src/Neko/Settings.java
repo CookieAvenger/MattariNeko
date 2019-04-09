@@ -1,6 +1,5 @@
 package Neko;
 
-
 import FrontEnd.NekoFrame;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,13 +15,11 @@ import java.util.Scanner;
 
 public class Settings {
 
-  File settings;
+  final static File SETTINGS = new File(System.getProperty("user.home") + System.getProperty("file.separator") + "MattariNeko.conf");
 
   public Settings() {
-    String file = System.getProperty("user.home") + System.getProperty("file.separator") + "MattariNeko.conf";
-    settings = new File(file);
-    if (!settings.exists()) {
-      Path copied = Paths.get(file);
+    if (!SETTINGS.exists()) {
+      Path copied = Paths.get(SETTINGS.getPath());
       Path originalPath = Paths.get("MattariNeko.conf");
       try {
         Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
@@ -38,7 +35,7 @@ public class Settings {
   }
 
   private void loadSettings() throws FileNotFoundException {
-    Scanner sc = new Scanner(settings);
+    Scanner sc = new Scanner(SETTINGS);
     while (sc.hasNext()) {
       String line = sc.nextLine();
       if (line.charAt(0) =='#') {
