@@ -29,23 +29,27 @@ public class NekoFrame extends JFrame {
 
   public Point getValidNekoLocation(Point location) {
     Dimension screenSize = getScreenSize();
-    x = location.x - (NekoImages.IMAGE_WIDTH / 2);
-    y = location.y - (NekoImages.IMAGE_HEIGHT / 2);
-    if (x < 0) {
-      x = 0;
-    } else if (x > screenSize.width - NekoImages.IMAGE_HEIGHT) {
-      x = screenSize.width - NekoImages.IMAGE_HEIGHT;
+    int localX = location.x - (NekoImages.IMAGE_WIDTH / 2);
+    int localY = location.y - (NekoImages.IMAGE_HEIGHT / 2);
+    if (localX < 0) {
+      localX = 0;
+    } else if (localX > screenSize.width - NekoImages.IMAGE_HEIGHT) {
+      localX = screenSize.width - NekoImages.IMAGE_HEIGHT;
     }
-    if (y < 0) {
-      y = 0;
-    } else if (y > screenSize.height - NekoImages.IMAGE_WIDTH) {
-      y = screenSize.height - NekoImages.IMAGE_WIDTH;
+    if (localY < 0) {
+      localY = 0;
+    } else if (localY > screenSize.height - NekoImages.IMAGE_WIDTH) {
+      localY = screenSize.height - NekoImages.IMAGE_WIDTH;
     }
-    return new Point(x, y);
+    return new Point(localX, localY);
   }
 
   public void setNekoLocation(Point location) {
-    setLocation(getValidNekoLocation(location));
+    System.out.println("l " + location );
+    Point validLocation = getValidNekoLocation(location);
+    this.x = validLocation.x;
+    this.y = validLocation.y;
+    setLocation(validLocation);
   }
 
   public Point getNekoLocation() {
@@ -68,7 +72,7 @@ public class NekoFrame extends JFrame {
     Dimension screenSize = getScreenSize();
     int x = (int) Math.round(screenSize.getWidth() * (widthPercent/100));
     int y = (int) Math.round(screenSize.getHeight() * (heightPercent/100));
-    return new Point(x, y);
+    return this.getValidNekoLocation(new Point(x, y));
   }
 
   public Dimension getScreenSize() {

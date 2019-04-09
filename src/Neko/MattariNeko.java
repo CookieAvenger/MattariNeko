@@ -69,10 +69,12 @@ public class MattariNeko {
     }
   }
 
-  private static void nekoToLocation(Point location) {
-    while (!frame.getNekoLocation().equals(frame.getValidNekoLocation(location))) {
+  private static void nekoToLocation(Point goalLocation) {
+    while (!frame.getNekoLocation().equals(frame.getValidNekoLocation(goalLocation))) {
       try {
-        NekoMovementCoordinator nextMove = new NekoMovementCoordinator(frame.getNekoLocation(), location, true);
+        System.out.println("f " + frame.getNekoLocation());
+        System.out.println("g " + frame.getValidNekoLocation(goalLocation));
+        NekoMovementCoordinator nextMove = new NekoMovementCoordinator(frame.getNekoLocation(), frame.getValidNekoLocation(goalLocation), true);
         nextMove.getAssignedAction().doAction(images, frame, nextMove);
       } catch (Exception e) {
         e.printStackTrace();
@@ -89,7 +91,7 @@ public class MattariNeko {
     int perimeter = screen.height*2 + screen.width*2;
     int pointOnPerimeter = ThreadLocalRandom.current().nextInt(0, perimeter);
     Point pointOnScreen = perimeterToScreen(pointOnPerimeter, screen);
-    nekoToLocation(pointOnScreen);
+    nekoToLocation(frame.getValidNekoLocation(pointOnScreen));
   }
 
   private static Point perimeterToScreen(int pointOnPerimeter, Dimension screen) {

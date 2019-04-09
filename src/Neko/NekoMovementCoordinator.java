@@ -15,16 +15,16 @@ public class NekoMovementCoordinator {
   private NekoAction assignedAction;
 
   public NekoMovementCoordinator(Point nekoLocation, Point goalLocation, boolean sitAtGoal) {
+    System.out.println("f2 "+ nekoLocation);
+    System.out.println("g2" + goalLocation);
     nextActionEndLocation = approximateNextLocation(nekoLocation, goalLocation);
-    if (nextActionEndLocation.equals(goalLocation)) {
-      if (sitAtGoal) {
-        if (sittingCatActions.isEmpty()) {
-          generateSittingCatAction();
-        }
-        assignedAction = sittingCatActions.poll();
-      } else {
-        assignedAction = assignScratch(nekoLocation, goalLocation);
+    if (nekoLocation.equals(goalLocation) && sitAtGoal) {
+      if (sittingCatActions.isEmpty()) {
+        generateSittingCatAction();
       }
+      assignedAction = sittingCatActions.poll();
+    } else if (nextActionEndLocation.equals(goalLocation) && !sitAtGoal) {
+      assignedAction = assignScratch(nekoLocation, goalLocation);
     } else {
       if (!sittingCatActions.isEmpty()) {
         sittingCatActions = new LinkedList<>();
@@ -50,9 +50,12 @@ public class NekoMovementCoordinator {
   }
 
   private boolean nekoAtGoal(Point nekoLocation, Point goalLocation) {
-    Point startOfNekoImage = new Point(nekoLocation.x - NekoImages.IMAGE_WIDTH / 2, nekoLocation.y - NekoImages.IMAGE_HEIGHT / 2);
-    Point endOfNekoImage = new Point(nekoLocation.x + NekoImages.IMAGE_WIDTH / 2, nekoLocation.y + NekoImages.IMAGE_HEIGHT / 2);
-    return startOfNekoImage.x <= goalLocation.x && goalLocation.x <= endOfNekoImage.x && startOfNekoImage.y <= goalLocation.y && goalLocation.y <= endOfNekoImage.y;
+    Point startOfNekoImage = new Point(nekoLocation.x - NekoImages.IMAGE_WIDTH / 2,
+        nekoLocation.y - NekoImages.IMAGE_HEIGHT / 2);
+    Point endOfNekoImage = new Point(nekoLocation.x + NekoImages.IMAGE_WIDTH / 2,
+        nekoLocation.y + NekoImages.IMAGE_HEIGHT / 2);
+    return startOfNekoImage.x <= goalLocation.x && goalLocation.x <= endOfNekoImage.x
+        && startOfNekoImage.y <= goalLocation.y && goalLocation.y <= endOfNekoImage.y;
   }
 
   private Point approximateNextLocation(Point nekoLocation, Point goalLocation) {
@@ -91,7 +94,7 @@ public class NekoMovementCoordinator {
   private NekoAction assignMovement(Point nekoLocation, Point nextActionEndLocation) {
     int x = nextActionEndLocation.x - nekoLocation.x;
     int y = nextActionEndLocation.y - nekoLocation.y;
-    double angle = Math.toDegrees(Math.atan2(y,x)) + 180;
+    double angle = Math.toDegrees(Math.atan2(y, x)) + 180;
     if (angle <= 22.5) {
       return new MoveLeft();
     } else if (angle <= 67.5) {
@@ -116,7 +119,7 @@ public class NekoMovementCoordinator {
   private NekoAction assignScratch(Point nekoLocation, Point goalLocation) {
     int x = goalLocation.x - nekoLocation.x;
     int y = goalLocation.y - nekoLocation.y;
-    double angle = Math.toDegrees(Math.atan2(y,x)) + 180;
+    double angle = Math.toDegrees(Math.atan2(y, x)) + 180;
     if (angle <= 45) {
       return new ScratchLeft();
     } else if (angle <= 135) {
@@ -138,8 +141,12 @@ public class NekoMovementCoordinator {
     if (movementNumber == numberOfMovements) {
       return nextActionEndLocation;
     } else {
-      int xChange = (int) Math.round((((double) (nextActionEndLocation.x - lastNekoLocation.x) / numberOfMovements)) * movementNumber);
-      int yChange = (int) Math.round((((double) (nextActionEndLocation.y - lastNekoLocation.y) / numberOfMovements)) * movementNumber);
+      int xChange = (int) Math.round(
+          (((double) (nextActionEndLocation.x - lastNekoLocation.x) / numberOfMovements))
+              * movementNumber);
+      int yChange = (int) Math.round(
+          (((double) (nextActionEndLocation.y - lastNekoLocation.y) / numberOfMovements))
+              * movementNumber);
       return new Point(lastNekoLocation.x + xChange, lastNekoLocation.y + yChange);
     }
   }
