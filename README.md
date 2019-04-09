@@ -9,6 +9,9 @@ Configuration file in home/MattariNeko.conf
 
 Activity tracker file in home/MattariNekoActivity.log - for data mining
 
+Notes:
+Gotta keep the .jar file and the folder named "NekoImages" in the same folder
+
 Future improvements:
 
 open to google keep note of work to do?
