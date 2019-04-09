@@ -1,7 +1,7 @@
 package Neko;
 
 import FrontEnd.NekoActions.NekoAction;
-import FrontEnd.NekoActions.NekoImages;
+import FrontEnd.NekoImages;
 import FrontEnd.NekoActions.SittingYawn;
 import FrontEnd.NekoActions.Sleep;
 import FrontEnd.NekoActions.WakingUp;

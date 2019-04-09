@@ -1,4 +1,4 @@
-package FrontEnd.NekoActions;
+package FrontEnd;
 
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -13,7 +13,7 @@ public class NekoImages {
   public static int IMAGE_WIDTH = 32;
 
   public NekoImages() {
-    File directory = new File("neko");
+    File directory = new File("NekoImages");
     File[] contents = directory.listFiles();
     if (contents == null || contents.length == 0) {
       try {

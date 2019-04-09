@@ -1,6 +1,7 @@
 package FrontEnd.NekoActions;
 
 import FrontEnd.NekoFrame;
+import FrontEnd.NekoImages;
 import Neko.NekoMovementCoordinator;
 
 public class WakingUp implements NekoAction {

@@ -3,7 +3,6 @@ package FrontEnd;
 import static Neko.MattariNeko.setNekoDown;
 import static Neko.MattariNeko.setNekoUp;
 
-import FrontEnd.NekoActions.NekoImages;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

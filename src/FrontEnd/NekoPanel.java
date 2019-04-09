@@ -1,6 +1,5 @@
 package FrontEnd;
 
-import FrontEnd.NekoActions.NekoImages;
 import java.awt.*;
 import javax.swing.*;
 
