@@ -16,4 +16,4 @@ Future improvements:
 
 open to google keep note of work to do?
 
-Have links to fun stuff - youtube, netflix, call Krishna, ect. - one minus of this idea is that it doesn't encourage reading or playing with Bo =(
+Have links to fun stuff - youtube, netflix, ect.
